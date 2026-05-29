@@ -155,44 +155,42 @@ document.getElementById("continueBtn")
 
 if(!verifiedUser) return;
 
-// token random
-const token = randomString();
+// random token
+const token =
+randomString();
 
 // random branch
 const branch =
 Math.floor(Math.random()*3)+1;
 
-// lưu token
+// save token
 sessionStorage.setItem(
 "rain_token",
 token
 );
 
-// redirect khác nhau
-const targets = [
-
-"https://hcroblox.github.io/Rain-Key/key.html?branch=1&token="+token,
-
-"https://hcroblox.github.io/Rain-Key/key.html?branch=2&token="+token,
-
-"https://hcroblox.github.io/Rain-Key/key.html?branch=3&token="+token
-
-];
-
-// link đích random
-const finalTarget =
-encodeURIComponent(
-targets[branch-1]
+// save allowed branch
+sessionStorage.setItem(
+"rain_branch",
+branch
 );
 
-// linkvertise
+// save redirect
+sessionStorage.setItem(
+"rain_redirect",
+"https://hcroblox.github.io/Rain-Key/key.html?branch=" +
+branch +
+"&token=" +
+token
+);
+
+// go linkvertise
 window.location.href =
-"https://link-target.net/6077399/XB4z3OuLhO0R?o=" +
-finalTarget;
+"https://link-target.net/6077399/XB4z3OuLhO0R";
 
 });
 
 </script>
 
 </body>
-</html>
+  </html>
