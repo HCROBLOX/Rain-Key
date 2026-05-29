@@ -7,7 +7,7 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Rain Key System</title>
+<title>Your Key</title>
 
 <style>
 
@@ -131,31 +131,43 @@ new URLSearchParams(
 window.location.search
 );
 
-// token
+// get token
 const token =
 params.get("token");
 
-// branch
+// get branch
 const branch =
 params.get("branch");
 
-// saved data
+// saved token
 const savedToken =
 localStorage.getItem(
 "rain_token"
 );
 
+// saved branch
 const savedBranch =
 localStorage.getItem(
 "rain_branch"
 );
+
+// saved redirect
+const savedRedirect =
+localStorage.getItem(
+"rain_redirect"
+);
+
+// current url
+const currentUrl =
+window.location.href;
 
 // anti bypass
 if(
 !token ||
 !branch ||
 token !== savedToken ||
-branch !== savedBranch
+branch != savedBranch ||
+currentUrl !== savedRedirect
 ){
 
 document.body.innerHTML =
@@ -167,9 +179,9 @@ throw new Error(
 
 }
 
-// generate random key
+// generate key
 function generateKey(
-length=40
+length=45
 ){
 
 const chars =
@@ -195,17 +207,17 @@ return result;
 
 }
 
-// unique branch key
+// branch storage
 const storageKey =
-"rain_branch_" + branch;
+"rain_key_" + branch;
 
-// get old key
+// old key
 let savedKey =
 localStorage.getItem(
 storageKey
 );
 
-// create new key
+// create if none
 if(!savedKey){
 
 savedKey =
@@ -221,7 +233,8 @@ savedKey
 // show key
 document.getElementById(
 "keyBox"
-).innerText = savedKey;
+).innerText =
+savedKey;
 
 // copy
 function copyKey(){
@@ -230,20 +243,11 @@ navigator.clipboard.writeText(
 savedKey
 );
 
-alert("Copied Key!");
-
-}
-
-// anti spam reload
-window.onbeforeunload =
-function(){
-
-localStorage.setItem(
-"rain_last_access",
-Date.now()
+alert(
+"Copied Key!"
 );
 
-};
+}
 
 // anti inspect
 document.addEventListener(
@@ -273,4 +277,4 @@ return false;
 </script>
 
 </body>
-</html>
+  </html>
