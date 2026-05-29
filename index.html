@@ -4,11 +4,13 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Rain Key System</title>
 
-<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+<script src="https://js.hcaptcha.com/1/api.js"
+async defer></script>
 
 <style>
 
@@ -126,22 +128,32 @@ function verified(){
 
 verifiedUser = true;
 
-document.getElementById("continueBtn")
-.disabled = false;
+document.getElementById(
+"continueBtn"
+).disabled = false;
 
 }
 
-function randomString(length=32){
+// random string
+function randomString(
+length=45
+){
 
 const chars =
-"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 let result = "";
 
-for(let i=0;i<length;i++){
+for(
+let i=0;
+i<length;
+i++
+){
 
 result += chars.charAt(
-Math.floor(Math.random()*chars.length)
+Math.floor(
+Math.random()*chars.length
+)
 );
 
 }
@@ -150,8 +162,11 @@ return result;
 
 }
 
-document.getElementById("continueBtn")
-.addEventListener("click",function(){
+document.getElementById(
+"continueBtn"
+).addEventListener(
+"click",
+function(){
 
 if(!verifiedUser) return;
 
@@ -159,38 +174,51 @@ if(!verifiedUser) return;
 const token =
 randomString();
 
-// random branch
+// unlimited branch
 const branch =
-Math.floor(Math.random()*3)+1;
+Math.floor(
+Math.random()*999999999
+)+1;
 
 // save token
-sessionStorage.setItem(
+localStorage.setItem(
 "rain_token",
 token
 );
 
-// save allowed branch
-sessionStorage.setItem(
+// save branch
+localStorage.setItem(
 "rain_branch",
 branch
 );
 
+// create redirect url
+const redirectUrl =
+"https://hcroblox.github.io/Rain-Key/key.html?branch=" +
+branch +
+"&token=" +
+token;
+
 // save redirect
-sessionStorage.setItem(
+localStorage.setItem(
 "rain_redirect",
+redirectUrl
+);
+
+// redirect to linkvertise
+window.location.href =
+"https://link-target.net/6077399/XB4z3OuLhO0R?r=" +
+encodeURIComponent(
 "https://hcroblox.github.io/Rain-Key/key.html?branch=" +
 branch +
 "&token=" +
 token
 );
 
-// go linkvertise
-window.location.href =
-"https://link-target.net/6077399/XB4z3OuLhO0R";
-
-});
+}
+);
 
 </script>
 
 </body>
-  </html>
+</html>
