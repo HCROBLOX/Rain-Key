@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rain Key System</title>
+
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
+font-family:sans-serif;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+overflow:hidden;
+}
+
+.container{
+width:360px;
+background:rgba(25,25,25,0.95);
+border:1px solid rgba(255,255,255,0.08);
+border-radius:22px;
+padding:30px;
+text-align:center;
+box-shadow:0 0 25px rgba(0,0,0,0.5);
+backdrop-filter:blur(10px);
+}
+
+.logo{
+width:85px;
+height:85px;
+border-radius:20px;
+margin-bottom:15px;
+object-fit:cover;
+}
+
+.title{
+font-size:30px;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.desc{
+color:#bdbdbd;
+font-size:14px;
+margin-bottom:22px;
+}
+
+.button{
+width:100%;
+padding:13px;
+border:none;
+border-radius:14px;
+background:#5865F2;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+transition:0.2s;
+margin-top:20px;
+}
+
+.button:hover{
+transform:scale(1.03);
+}
+
+.button:disabled{
+opacity:0.5;
+cursor:not-allowed;
+}
+
+.footer{
+margin-top:18px;
+color:gray;
+font-size:12px;
+}
+
+.glow{
+position:absolute;
+width:300px;
+height:300px;
+background:#5865F2;
+filter:blur(140px);
+opacity:0.15;
+border-radius:50%;
+z-index:-1;
+}
+
+.glow1{
+top:-100px;
+left:-100px;
+}
+
+.glow2{
+bottom:-100px;
+right:-100px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+
+<div class="container">
+
+<img class="logo"
+src="logo.png">
+
+<div class="title">
+Rain Key System
+</div>
+
+<div class="desc">
+Complete hCaptcha to continue
+</div>
+
+<div class="h-captcha"
+data-sitekey="SITE_KEY_CUA_BRO"
+data-callback="verified">
+</div>
+
+<button class="button"
+id="continueBtn"
+disabled>
+Continue
+</button>
+
+<div class="footer">
+Protected by hCaptcha
+</div>
+
+</div>
+
+<script>
+
+let verifiedUser = false;
+
+function verified(){
+
+verifiedUser = true;
+
+document.getElementById("continueBtn")
+.disabled = false;
+
+}
+
+function randomId(length=10){
+
+const chars =
+"abcdefghijklmnopqrstuvwxyz0123456789";
+
+let result = "";
+
+for(let i=0;i<length;i++){
+
+result += chars.charAt(
+Math.floor(Math.random()*chars.length)
+);
+
+}
+
+return result;
+
+}
+
+document.getElementById("continueBtn")
+.addEventListener("click",function(){
+
+if(!verifiedUser) return;
+
+// tạo id random
+const randomKeyId = randomId();
+
+// lưu verify
+sessionStorage.setItem(
+"rain_verify_" + randomKeyId,
+"true"
+);
+
+// link đích
+const target =
+encodeURIComponent(
+"https://TENWEB.github.io/key.html?key=" + randomKeyId
+);
+
+// chuyển hướng taplayma
+window.location.href =
+"https://taplayma.com/LINK_CUA_BRO?url=" + target;
+
+});
+
+</script>
+
+</body>
+  </html>
