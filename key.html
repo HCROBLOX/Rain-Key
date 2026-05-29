@@ -139,14 +139,14 @@ params.get("token");
 const branch =
 params.get("branch");
 
-// saved session
+// saved data
 const savedToken =
-sessionStorage.getItem(
+localStorage.getItem(
 "rain_token"
 );
 
 const savedBranch =
-sessionStorage.getItem(
+localStorage.getItem(
 "rain_branch"
 );
 
@@ -167,9 +167,9 @@ throw new Error(
 
 }
 
-// random key generator
+// generate random key
 function generateKey(
-length=32
+length=40
 ){
 
 const chars =
@@ -195,21 +195,21 @@ return result;
 
 }
 
-// unlimited branch storage
+// unique branch key
 const storageKey =
 "rain_branch_" + branch;
 
-// old key
+// get old key
 let savedKey =
 localStorage.getItem(
 storageKey
 );
 
-// create new key if none
+// create new key
 if(!savedKey){
 
 savedKey =
-generateKey(40);
+generateKey();
 
 localStorage.setItem(
 storageKey,
@@ -223,7 +223,7 @@ document.getElementById(
 "keyBox"
 ).innerText = savedKey;
 
-// copy key
+// copy
 function copyKey(){
 
 navigator.clipboard.writeText(
@@ -234,30 +234,34 @@ alert("Copied Key!");
 
 }
 
-// anti reload spam
-window.onbeforeunload = function(){
+// anti spam reload
+window.onbeforeunload =
+function(){
 
-sessionStorage.setItem(
+localStorage.setItem(
 "rain_last_access",
 Date.now()
 );
 
 };
 
-// anti inspect basic
+// anti inspect
 document.addEventListener(
 "contextmenu",
 event => event.preventDefault()
 );
 
 // anti f12
-document.onkeydown = function(e){
+document.onkeydown =
+function(e){
 
 if(
 e.keyCode == 123 ||
-(e.ctrlKey &&
+(
+e.ctrlKey &&
 e.shiftKey &&
-e.keyCode == 73)
+e.keyCode == 73
+)
 ){
 
 return false;
