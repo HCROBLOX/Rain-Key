@@ -131,18 +131,64 @@ document.getElementById("continueBtn")
 
 }
 
+function randomString(length=32){
+
+const chars =
+"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+let result = "";
+
+for(let i=0;i<length;i++){
+
+result += chars.charAt(
+Math.floor(Math.random()*chars.length)
+);
+
+}
+
+return result;
+
+}
+
 document.getElementById("continueBtn")
 .addEventListener("click",function(){
 
 if(!verifiedUser) return;
 
+// token random
+const token = randomString();
+
+// random branch
+const branch =
+Math.floor(Math.random()*3)+1;
+
+// lưu token
 sessionStorage.setItem(
-"rain_verified",
-"true"
+"rain_token",
+token
 );
 
+// redirect khác nhau
+const targets = [
+
+"https://hcroblox.github.io/Rain-Key/key.html?branch=1&token="+token,
+
+"https://hcroblox.github.io/Rain-Key/key.html?branch=2&token="+token,
+
+"https://hcroblox.github.io/Rain-Key/key.html?branch=3&token="+token
+
+];
+
+// link đích random
+const finalTarget =
+encodeURIComponent(
+targets[branch-1]
+);
+
+// linkvertise
 window.location.href =
-"https://link-target.net/6077399/XB4z3OuLhO0R";
+"https://link-target.net/6077399/XB4z3OuLhO0R?o=" +
+finalTarget;
 
 });
 
