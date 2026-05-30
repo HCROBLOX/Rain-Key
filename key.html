@@ -151,23 +151,14 @@ localStorage.getItem(
 "rain_branch"
 );
 
-// saved redirect
-const savedRedirect =
-localStorage.getItem(
-"rain_redirect"
-);
 
-// current url
-const currentUrl =
-window.location.href;
 
 // anti bypass
 if(
 !token ||
 !branch ||
 token !== savedToken ||
-branch != savedBranch ||
-currentUrl !== savedRedirect
+branch !== savedBranch
 ){
 
 document.body.innerHTML =
@@ -277,4 +268,4 @@ return false;
 </script>
 
 </body>
-  </html>
+</html>
