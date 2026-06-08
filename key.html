@@ -97,8 +97,13 @@ const storageKey = "rain_key_global";
 let key = localStorage.getItem(storageKey);
 
 if(!key){
-key = generateKey();
-localStorage.setItem(storageKey, key);
+    key = generateKey();
+
+    localStorage.setItem(storageKey, key);
+
+    fetch(
+      "https://web-production-5e3ed.up.railway.app/add/" + key
+    );
 }
 
 // show key
