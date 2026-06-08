@@ -6,12 +6,7 @@
 <title>Your Key</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
 
 body{
 background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
@@ -32,22 +27,11 @@ backdrop-filter: blur(10px);
 }
 
 .logo{
-width:80px;
-height:80px;
-border-radius:15px;
-margin-bottom:10px;
+width:80px;height:80px;border-radius:15px;margin-bottom:10px;
 }
 
-.title{
-font-size:28px;
-font-weight:bold;
-}
-
-.desc{
-color:#aaa;
-font-size:14px;
-margin:10px 0 20px;
-}
+.title{font-size:28px;font-weight:bold;}
+.desc{color:#aaa;font-size:14px;margin:10px 0 20px;}
 
 .keybox{
 background:#111;
@@ -71,18 +55,9 @@ background:#5865F2;
 color:white;
 font-size:15px;
 cursor:pointer;
-transition:0.2s;
 }
 
-.button:active{
-transform:scale(0.98);
-}
-
-.footer{
-margin-top:15px;
-font-size:12px;
-color:gray;
-}
+.footer{margin-top:15px;font-size:12px;color:gray;}
 </style>
 </head>
 
@@ -94,7 +69,7 @@ color:gray;
 <div class="title">Your Key</div>
 <div class="desc">Verified System</div>
 
-<div class="keybox" id="keyBox">Loading...</div>
+<div class="keybox" id="keyBox">Generating...</div>
 
 <button class="button" onclick="copyKey()">Copy Key</button>
 
@@ -103,56 +78,8 @@ color:gray;
 
 <script>
 // =====================
-// GET PARAMS SAFELY
+// GENERATE KEY
 // =====================
-const params = new URLSearchParams(window.location.search);
-const token = params.get("token");
-const branch = params.get("branch");
-
-// =====================
-// FALLBACK UI (NO CRASH)
-// =====================
-if(!token || !branch){
-document.body.innerHTML = `
-<div style="color:white;text-align:center;font-family:sans-serif;padding:20px;">
-<h2>Missing token/branch</h2>
-<p>Open link đúng format:</p>
-<code>?token=xxx&branch=xxx</code>
-
-<br><br>
-
-<input id="tokenInput" placeholder="token" style="padding:10px;width:80%;border-radius:8px;border:none"><br><br>
-<input id="branchInput" placeholder="branch" style="padding:10px;width:80%;border-radius:8px;border:none"><br><br>
-
-<button onclick="go()" style="padding:10px 20px;border:none;border-radius:10px;background:#5865F2;color:white;">
-Continue
-</button>
-</div>
-
-<script>
-function go(){
-const t = document.getElementById('tokenInput').value;
-const b = document.getElementById('branchInput').value;
-if(t && b){
-location.href = '?token=' + encodeURIComponent(t) + '&branch=' + encodeURIComponent(b);
-}
-}
-<\/script>
-`;
-
-} else {
-
-// =====================
-// SAVE SAFE STORAGE
-// =====================
-localStorage.setItem("rain_token", token);
-localStorage.setItem("rain_branch", branch);
-
-// =====================
-// KEY SYSTEM
-// =====================
-const storageKey = "rain_key_" + branch;
-
 function generateKey(len = 45){
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 let out = "";
@@ -162,32 +89,31 @@ out += chars[Math.floor(Math.random() * chars.length)];
 return out;
 }
 
-let savedKey = localStorage.getItem(storageKey);
+// =====================
+// CREATE & SAVE KEY
+// =====================
+const storageKey = "rain_key_global";
 
-if(!savedKey){
-savedKey = generateKey();
-localStorage.setItem(storageKey, savedKey);
+let key = localStorage.getItem(storageKey);
+
+if(!key){
+key = generateKey();
+localStorage.setItem(storageKey, key);
 }
 
-// =====================
-// SHOW KEY
-// =====================
-document.getElementById("keyBox").innerText = savedKey;
+// show key
+document.getElementById("keyBox").innerText = key;
 
 // =====================
 // COPY KEY
 // =====================
-window.copyKey = function(){
-navigator.clipboard.writeText(savedKey)
+function copyKey(){
+navigator.clipboard.writeText(key)
 .then(() => alert("Copied Key!"))
 .catch(() => alert("Copy failed!"));
-};
-
 }
 
-// =====================
-// DISABLE RIGHT CLICK
-// =====================
+// disable right click
 document.addEventListener("contextmenu", e => e.preventDefault());
 </script>
 
