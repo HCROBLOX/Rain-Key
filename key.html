@@ -1,270 +1,194 @@
-<!-- key.html -->
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Key</title>
 
 <style>
-
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:sans-serif;
 }
 
 body{
 background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
-font-family:sans-serif;
 color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
-overflow:hidden;
 }
 
 .container{
 width:360px;
 background:rgba(25,25,25,0.95);
-border:1px solid rgba(255,255,255,0.08);
-border-radius:22px;
+border-radius:20px;
 padding:30px;
 text-align:center;
-box-shadow:0 0 25px rgba(0,0,0,0.5);
+backdrop-filter: blur(10px);
 }
 
 .logo{
-width:85px;
-height:85px;
-border-radius:20px;
-margin-bottom:15px;
-object-fit:cover;
+width:80px;
+height:80px;
+border-radius:15px;
+margin-bottom:10px;
 }
 
 .title{
-font-size:30px;
+font-size:28px;
 font-weight:bold;
-margin-bottom:8px;
 }
 
 .desc{
-color:#bdbdbd;
+color:#aaa;
 font-size:14px;
-margin-bottom:25px;
+margin:10px 0 20px;
 }
 
 .keybox{
 background:#111;
-border:1px solid rgba(255,255,255,0.08);
-border-radius:14px;
-padding:18px;
-font-size:18px;
-font-weight:bold;
-letter-spacing:1px;
-margin-bottom:20px;
+padding:15px;
+border-radius:12px;
+font-size:16px;
 word-break:break-all;
+margin-bottom:15px;
+min-height:50px;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 .button{
 width:100%;
-padding:13px;
+padding:12px;
 border:none;
-border-radius:14px;
+border-radius:12px;
 background:#5865F2;
 color:white;
-font-size:16px;
-font-weight:bold;
+font-size:15px;
 cursor:pointer;
-margin-top:10px;
+transition:0.2s;
+}
+
+.button:active{
+transform:scale(0.98);
 }
 
 .footer{
-margin-top:18px;
-color:gray;
+margin-top:15px;
 font-size:12px;
+color:gray;
 }
-
 </style>
-
 </head>
+
 <body>
 
 <div class="container">
+<img class="logo" src="logo.png" onerror="this.style.display='none'">
 
-<img class="logo"
-src="logo.png">
+<div class="title">Your Key</div>
+<div class="desc">Verified System</div>
 
-<div class="title">
-Your Key
-</div>
+<div class="keybox" id="keyBox">Loading...</div>
 
-<div class="desc">
-Successfully Passed Verification
-</div>
+<button class="button" onclick="copyKey()">Copy Key</button>
 
-<div class="keybox"
-id="keyBox">
-Loading...
-</div>
-
-<button class="button"
-onclick="copyKey()">
-Copy Key
-</button>
-
-<div class="footer">
-Rain Key System
-</div>
-
+<div class="footer">Rain Key System</div>
 </div>
 
 <script>
+// =====================
+// GET PARAMS SAFELY
+// =====================
+const params = new URLSearchParams(window.location.search);
+const token = params.get("token");
+const branch = params.get("branch");
 
-// params
-const params =
-new URLSearchParams(
-window.location.search
-);
+// =====================
+// FALLBACK UI (NO CRASH)
+// =====================
+if(!token || !branch){
+document.body.innerHTML = `
+<div style="color:white;text-align:center;font-family:sans-serif;padding:20px;">
+<h2>Missing token/branch</h2>
+<p>Open link đúng format:</p>
+<code>?token=xxx&branch=xxx</code>
 
-// get token
-const token =
-params.get("token");
+<br><br>
 
-// get branch
-const branch =
-params.get("branch");
+<input id="tokenInput" placeholder="token" style="padding:10px;width:80%;border-radius:8px;border:none"><br><br>
+<input id="branchInput" placeholder="branch" style="padding:10px;width:80%;border-radius:8px;border:none"><br><br>
 
-// saved token
-const savedToken =
-localStorage.getItem(
-"rain_token"
-);
+<button onclick="go()" style="padding:10px 20px;border:none;border-radius:10px;background:#5865F2;color:white;">
+Continue
+</button>
+</div>
 
-// saved branch
-const savedBranch =
-localStorage.getItem(
-"rain_branch"
-);
+<script>
+function go(){
+const t = document.getElementById('tokenInput').value;
+const b = document.getElementById('branchInput').value;
+if(t && b){
+location.href = '?token=' + encodeURIComponent(t) + '&branch=' + encodeURIComponent(b);
+}
+}
+<\/script>
+`;
 
+} else {
 
+// =====================
+// SAVE SAFE STORAGE
+// =====================
+localStorage.setItem("rain_token", token);
+localStorage.setItem("rain_branch", branch);
 
-// anti bypass
-if(
-!token ||
-!branch ||
-token !== savedToken ||
-branch !== savedBranch
-){
+// =====================
+// KEY SYSTEM
+// =====================
+const storageKey = "rain_key_" + branch;
 
-document.body.innerHTML =
-"<h1 style='color:white;font-family:sans-serif;text-align:center;'>Access Denied</h1>";
-
-throw new Error(
-"Bypass detected"
-);
-
+function generateKey(len = 45){
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+let out = "";
+for(let i = 0; i < len; i++){
+out += chars[Math.floor(Math.random() * chars.length)];
+}
+return out;
 }
 
-// generate key
-function generateKey(
-length=45
-){
+let savedKey = localStorage.getItem(storageKey);
 
-const chars =
-"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-let result = "";
-
-for(
-let i=0;
-i<length;
-i++
-){
-
-result += chars.charAt(
-Math.floor(
-Math.random()*chars.length
-)
-);
-
-}
-
-return result;
-
-}
-
-// branch storage
-const storageKey =
-"rain_key_" + branch;
-
-// old key
-let savedKey =
-localStorage.getItem(
-storageKey
-);
-
-// create if none
 if(!savedKey){
-
-savedKey =
-generateKey();
-
-localStorage.setItem(
-storageKey,
-savedKey
-);
-
+savedKey = generateKey();
+localStorage.setItem(storageKey, savedKey);
 }
 
-// show key
-document.getElementById(
-"keyBox"
-).innerText =
-savedKey;
+// =====================
+// SHOW KEY
+// =====================
+document.getElementById("keyBox").innerText = savedKey;
 
-// copy
-function copyKey(){
-
-navigator.clipboard.writeText(
-savedKey
-);
-
-alert(
-"Copied Key!"
-);
-
-}
-
-// anti inspect
-document.addEventListener(
-"contextmenu",
-event => event.preventDefault()
-);
-
-// anti f12
-document.onkeydown =
-function(e){
-
-if(
-e.keyCode == 123 ||
-(
-e.ctrlKey &&
-e.shiftKey &&
-e.keyCode == 73
-)
-){
-
-return false;
-
-}
-
+// =====================
+// COPY KEY
+// =====================
+window.copyKey = function(){
+navigator.clipboard.writeText(savedKey)
+.then(() => alert("Copied Key!"))
+.catch(() => alert("Copy failed!"));
 };
 
+}
+
+// =====================
+// DISABLE RIGHT CLICK
+// =====================
+document.addEventListener("contextmenu", e => e.preventDefault());
 </script>
 
 </body>
